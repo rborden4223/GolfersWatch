@@ -1,0 +1,83 @@
+<html>
+<head>
+<title>MapsActivity.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: #999999; font-weight: normal; font-style: normal; }
+.s0 { color: rgb(0,0,128); font-weight: bold; }
+.s1 { color: rgb(0,0,0); }
+.s2 { color: rgb(128,128,128); font-style: italic; }
+.s3 { color: rgb(0,128,0); font-weight: bold; }
+.s4 { color: rgb(0,0,255); }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+MapsActivity.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+<span class="s0">package </span><span class="s1">com.ryanborden.golferswatch; 
+ 
+</span><span class="s0">import </span><span class="s1">android.content.Intent; 
+</span><span class="s0">import </span><span class="s1">android.support.v4.app.FragmentActivity; 
+</span><span class="s0">import </span><span class="s1">android.os.Bundle; 
+</span><span class="s0">import </span><span class="s1">android.util.Log; 
+ 
+</span><span class="s0">import </span><span class="s1">com.google.android.gms.maps.CameraUpdateFactory; 
+</span><span class="s0">import </span><span class="s1">com.google.android.gms.maps.GoogleMap; 
+</span><span class="s0">import </span><span class="s1">com.google.android.gms.maps.OnMapReadyCallback; 
+</span><span class="s0">import </span><span class="s1">com.google.android.gms.maps.SupportMapFragment; 
+</span><span class="s0">import </span><span class="s1">com.google.android.gms.maps.model.LatLng; 
+</span><span class="s0">import </span><span class="s1">com.google.android.gms.maps.model.MarkerOptions; 
+ 
+</span><span class="s0">public class </span><span class="s1">MapsActivity </span><span class="s0">extends </span><span class="s1">FragmentActivity </span><span class="s0">implements </span><span class="s1">OnMapReadyCallback { 
+ 
+    </span><span class="s0">public </span><span class="s1">GoogleMap mMap; 
+ 
+ 
+    </span><span class="s2">//int lat = intent.getIntExtra(&quot;Lat&quot;,0);</span><span class="s1"> 
+    </span><span class="s2">//int lon = intent.getIntExtra(&quot;Lon&quot;,0);</span><span class="s1"> 
+ 
+    @Override 
+    </span><span class="s0">protected void </span><span class="s1">onCreate(Bundle savedInstanceState){ 
+        </span><span class="s0">super</span><span class="s1">.onCreate(savedInstanceState); 
+        setContentView(R.layout.activity_maps2); 
+        </span><span class="s2">// Obtain the SupportMapFragment and get notified when the map is ready to be used.</span><span class="s1"> 
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager() 
+                .findFragmentById(R.id.map); 
+        mapFragment.getMapAsync(</span><span class="s0">this</span><span class="s1">); 
+ 
+ 
+ 
+ 
+    } 
+ 
+ 
+    </span><span class="s2">/** 
+     * Manipulates the map once available. 
+     * This callback is triggered when the map is ready to be used. 
+     * This is where we can add markers or lines, add listeners or move the camera. In this case, 
+     * we just add a marker near Sydney, Australia. 
+     * If Google Play services is not installed on the device, the user will be prompted to install 
+     * it inside the SupportMapFragment. This method will only be triggered once the user has 
+     * installed Google Play services and returned to the app. 
+     */</span><span class="s1"> 
+    @Override 
+    </span><span class="s0">public void </span><span class="s1">onMapReady(GoogleMap googleMap) { 
+        mMap = googleMap; 
+        Intent intent = getIntent(); 
+        </span><span class="s0">int </span><span class="s1">lat = intent.getIntExtra(</span><span class="s3">&quot;Lat&quot;</span><span class="s1">,</span><span class="s4">0</span><span class="s1">); 
+        </span><span class="s0">int </span><span class="s1">lon = intent.getIntExtra(</span><span class="s3">&quot;Lon&quot;</span><span class="s1">,</span><span class="s4">0</span><span class="s1">); 
+ 
+        </span><span class="s2">// Add a marker in Sydney and move the camera</span><span class="s1"> 
+        LatLng sydney = </span><span class="s0">new </span><span class="s1">LatLng(lat   ,lon); 
+        mMap.addMarker(</span><span class="s0">new </span><span class="s1">MarkerOptions().position(sydney).title(</span><span class="s3">&quot;Marker in Sydney&quot;</span><span class="s1">)); 
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney)); 
+ 
+    } 
+} 
+</span></pre>
+</body>
+</html>

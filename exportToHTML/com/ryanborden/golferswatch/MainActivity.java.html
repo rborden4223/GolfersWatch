@@ -1,0 +1,194 @@
+<html>
+<head>
+<title>MainActivity.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: #999999; font-weight: normal; font-style: normal; }
+.s0 { color: rgb(0,0,128); font-weight: bold; }
+.s1 { color: rgb(0,0,0); }
+.s2 { color: rgb(0,0,255); }
+.s3 { color: rgb(0,128,0); font-weight: bold; }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+MainActivity.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+<span class="s0">package </span><span class="s1">com.ryanborden.golferswatch; 
+ 
+</span><span class="s0">import </span><span class="s1">android.Manifest; 
+</span><span class="s0">import </span><span class="s1">android.content.Context; 
+</span><span class="s0">import </span><span class="s1">android.content.Intent; 
+</span><span class="s0">import </span><span class="s1">android.content.pm.PackageManager; 
+</span><span class="s0">import </span><span class="s1">android.location.Address; 
+</span><span class="s0">import </span><span class="s1">android.location.Geocoder; 
+</span><span class="s0">import </span><span class="s1">android.location.Location; 
+</span><span class="s0">import </span><span class="s1">android.location.LocationListener; 
+</span><span class="s0">import </span><span class="s1">android.location.LocationManager; 
+</span><span class="s0">import </span><span class="s1">android.os.Build; 
+</span><span class="s0">import </span><span class="s1">android.support.annotation.NonNull; 
+</span><span class="s0">import </span><span class="s1">android.support.v4.app.ActivityCompat; 
+</span><span class="s0">import </span><span class="s1">android.support.v4.content.ContextCompat; 
+</span><span class="s0">import </span><span class="s1">android.support.v7.app.AppCompatActivity; 
+</span><span class="s0">import </span><span class="s1">android.os.Bundle; 
+</span><span class="s0">import </span><span class="s1">android.util.Log; 
+</span><span class="s0">import </span><span class="s1">android.view.View; 
+</span><span class="s0">import </span><span class="s1">android.widget.TextView; 
+ 
+</span><span class="s0">import </span><span class="s1">org.w3c.dom.Text; 
+ 
+</span><span class="s0">import </span><span class="s1">java.io.IOException; 
+</span><span class="s0">import </span><span class="s1">java.util.List; 
+</span><span class="s0">import </span><span class="s1">java.util.Locale; 
+ 
+</span><span class="s0">public class </span><span class="s1">MainActivity </span><span class="s0">extends </span><span class="s1">AppCompatActivity { 
+ 
+    LocationManager locationManager; 
+    LocationListener locationListener; 
+ 
+    </span><span class="s0">public void </span><span class="s1">toMaps(View view){ 
+ 
+        Intent intent = </span><span class="s0">new </span><span class="s1">Intent(getApplicationContext(),MapsActivity.</span><span class="s0">class</span><span class="s1">); 
+        startActivity(intent); 
+ 
+ 
+    } 
+ 
+    @Override 
+    </span><span class="s0">public void </span><span class="s1">onRequestPermissionsResult(</span><span class="s0">int </span><span class="s1">requestCode, @NonNull String[] permissions, @NonNull </span><span class="s0">int</span><span class="s1">[] grantResults) { 
+        </span><span class="s0">super</span><span class="s1">.onRequestPermissionsResult(requestCode, permissions, grantResults); 
+ 
+        </span><span class="s0">if</span><span class="s1">(grantResults.length &gt;</span><span class="s2">0 </span><span class="s1">&amp;&amp; grantResults[</span><span class="s2">0</span><span class="s1">] == PackageManager.PERMISSION_GRANTED){ 
+ 
+            startListening(); 
+        } 
+    } 
+ 
+ 
+    </span><span class="s0">public void </span><span class="s1">startListening(){ 
+        </span><span class="s0">if</span><span class="s1">(ContextCompat.checkSelfPermission(</span><span class="s0">this</span><span class="s1">,Manifest.permission.ACCESS_FINE_LOCATION )== PackageManager.PERMISSION_GRANTED){ 
+ 
+            locationManager = (LocationManager) </span><span class="s0">this</span><span class="s1">.getSystemService(Context.LOCATION_SERVICE); 
+        } 
+    } 
+ 
+ 
+    </span><span class="s0">public </span><span class="s1">Location updateLocationInfo(Location location) </span><span class="s0">throws </span><span class="s1">IOException { 
+ 
+        TextView latTextView = (TextView) findViewById(R.id.latTextView); 
+        TextView lonTextView = (TextView) findViewById(R.id.lonTextView); 
+        TextView altTextView = (TextView) findViewById(R.id.altTextView); 
+        TextView accTextView = (TextView) findViewById(R.id.accTextView); 
+ 
+ 
+        latTextView.setText(</span><span class="s3">&quot;Latitude: &quot; </span><span class="s1">+ location.getLatitude()); 
+        lonTextView.setText(</span><span class="s3">&quot;Longitude: &quot; </span><span class="s1">+ location.getLongitude()); 
+        altTextView.setText(</span><span class="s3">&quot;Altitude: &quot; </span><span class="s1">+ location.getAltitude()); 
+        accTextView.setText(</span><span class="s3">&quot;Accuracy: &quot; </span><span class="s1">+ location.getAccuracy()); 
+ 
+        Geocoder geocoder = </span><span class="s0">new </span><span class="s1">Geocoder(getApplicationContext(), Locale.getDefault()); 
+        Log.i(</span><span class="s3">&quot;locationinfo:&quot;</span><span class="s1">, location.toString()); 
+        </span><span class="s0">try </span><span class="s1">{ 
+            String address = </span><span class="s3">&quot;Could not find address&quot;</span><span class="s1">; 
+            List&lt;Address&gt; listAddresses = geocoder.getFromLocation(location.getLatitude(),location.getLongitude(), </span><span class="s2">1</span><span class="s1">); 
+            </span><span class="s0">if</span><span class="s1">(listAddresses != </span><span class="s0">null </span><span class="s1">&amp;&amp; listAddresses.size()&gt;</span><span class="s2">0</span><span class="s1">) { 
+                Log.i(</span><span class="s3">&quot;Place Info&quot;</span><span class="s1">, listAddresses.get(</span><span class="s2">0</span><span class="s1">).toString()); 
+                address = </span><span class="s3">&quot;Address: </span><span class="s0">\n</span><span class="s3">&quot;</span><span class="s1">; 
+                </span><span class="s0">if </span><span class="s1">(listAddresses.get(</span><span class="s2">0</span><span class="s1">).getSubThoroughfare() != </span><span class="s0">null</span><span class="s1">){ 
+ 
+                    address += listAddresses.get(</span><span class="s2">0</span><span class="s1">).getSubThoroughfare() + </span><span class="s3">&quot; &quot;</span><span class="s1">; 
+                } 
+                </span><span class="s0">if </span><span class="s1">(listAddresses.get(</span><span class="s2">0</span><span class="s1">).getThoroughfare() != </span><span class="s0">null</span><span class="s1">) { 
+ 
+                    address += listAddresses.get(</span><span class="s2">0</span><span class="s1">).getThoroughfare() + </span><span class="s3">&quot;</span><span class="s0">\n</span><span class="s3"> &quot;</span><span class="s1">; 
+ 
+                } 
+                </span><span class="s0">if </span><span class="s1">(listAddresses.get(</span><span class="s2">0</span><span class="s1">).getLocality() != </span><span class="s0">null</span><span class="s1">) { 
+ 
+                    address += listAddresses.get(</span><span class="s2">0</span><span class="s1">).getLocality() + </span><span class="s3">&quot;</span><span class="s0">\n</span><span class="s3"> &quot;</span><span class="s1">; 
+ 
+                } 
+                </span><span class="s0">if </span><span class="s1">(listAddresses.get(</span><span class="s2">0</span><span class="s1">).getPostalCode() != </span><span class="s0">null</span><span class="s1">) { 
+ 
+                    address += listAddresses.get(</span><span class="s2">0</span><span class="s1">).getPostalCode() + </span><span class="s3">&quot;</span><span class="s0">\n</span><span class="s3"> &quot;</span><span class="s1">; 
+ 
+                } 
+                </span><span class="s0">if </span><span class="s1">(listAddresses.get(</span><span class="s2">0</span><span class="s1">).getCountryName() != </span><span class="s0">null</span><span class="s1">) { 
+ 
+                    address += listAddresses.get(</span><span class="s2">0</span><span class="s1">).getCountryName() + </span><span class="s3">&quot;</span><span class="s0">\n</span><span class="s3"> &quot;</span><span class="s1">; 
+ 
+                } 
+            } 
+            TextView addressTextView = (TextView) findViewById(R.id.addressTextView); 
+            addressTextView.setText(address); 
+        } </span><span class="s0">catch </span><span class="s1">(IOException e) { 
+            e.printStackTrace(); 
+        } 
+ 
+        </span><span class="s0">return </span><span class="s1">location; 
+    } 
+ 
+ 
+    @Override 
+    </span><span class="s0">protected void </span><span class="s1">onCreate(Bundle savedInstanceState) { 
+        </span><span class="s0">super</span><span class="s1">.onCreate(savedInstanceState); 
+        setContentView(R.layout.activity_main); 
+ 
+        locationManager = (LocationManager) </span><span class="s0">this</span><span class="s1">.getSystemService(Context.LOCATION_SERVICE); 
+        locationListener = </span><span class="s0">new </span><span class="s1">LocationListener() { 
+            @Override 
+            </span><span class="s0">public void </span><span class="s1">onLocationChanged(Location location) { 
+                </span><span class="s0">try </span><span class="s1">{ 
+                    updateLocationInfo(location); 
+                } </span><span class="s0">catch </span><span class="s1">(IOException e) { 
+                    e.printStackTrace(); 
+                } 
+ 
+            } 
+ 
+            @Override 
+            </span><span class="s0">public void </span><span class="s1">onStatusChanged(String s, </span><span class="s0">int </span><span class="s1">i, Bundle bundle) { 
+ 
+            } 
+ 
+            @Override 
+            </span><span class="s0">public void </span><span class="s1">onProviderEnabled(String s) { 
+ 
+            } 
+ 
+            @Override 
+            </span><span class="s0">public void </span><span class="s1">onProviderDisabled(String s) { 
+ 
+            } 
+        }; 
+        </span><span class="s0">if </span><span class="s1">(Build.VERSION.SDK_INT &lt; </span><span class="s2">23</span><span class="s1">){ 
+ 
+            startListening(); 
+ 
+        } </span><span class="s0">else </span><span class="s1">{ 
+            </span><span class="s0">if </span><span class="s1">(ContextCompat.checkSelfPermission(</span><span class="s0">this</span><span class="s1">, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){ 
+ 
+                ActivityCompat.requestPermissions(</span><span class="s0">this</span><span class="s1">,</span><span class="s0">new </span><span class="s1">String[]{Manifest.permission.ACCESS_FINE_LOCATION},</span><span class="s2">1</span><span class="s1">); 
+            }</span><span class="s0">else </span><span class="s1">{ 
+ 
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,</span><span class="s2">1000</span><span class="s1">,</span><span class="s2">0</span><span class="s1">,locationListener); 
+                Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER); 
+ 
+                </span><span class="s0">if </span><span class="s1">(location != </span><span class="s0">null</span><span class="s1">) { 
+                    </span><span class="s0">try </span><span class="s1">{ 
+                        updateLocationInfo(location); 
+                    } </span><span class="s0">catch </span><span class="s1">(IOException e) { 
+                        e.printStackTrace(); 
+                    } 
+                } 
+ 
+            } 
+        } 
+    } 
+} 
+</span></pre>
+</body>
+</html>
